@@ -4,7 +4,8 @@ import React, { Component } from 'react';
 class AddStudent extends Component {
     constructor(props) {
         super(props);
-        this.state = {email: null, firstName: null, lastName: null, status_code: 0, status: null};
+        this.state = {email: null, firstName: null, lastName: null, status_code: 0, status: null,
+                      addedEmail: null, addedName: null, addedStatusCode: null, addedStatus: null, addedStudentId: null};
     }
 
     updateFields = (event) => {
@@ -43,7 +44,10 @@ class AddStudent extends Component {
         try {
             const fetchResponse = await fetch('http://localhost:8080/student', settings);
             const data = await fetchResponse.json();
+            this.setState({addedEmail: data.email, addedName: data.name,
+                            addedStudentId: data.student_id, addedStatus: data.status, addedStatusCode: data.statusCode});
             document.getElementById("error").hidden = true;
+            document.getElementById("addedList").hidden = false;
             return data;
         } catch (e) {
             return e;
@@ -55,7 +59,7 @@ class AddStudent extends Component {
 
     }
 
-      render() {   
+      render() {
 
         return (
 
@@ -63,18 +67,27 @@ class AddStudent extends Component {
 
                 <Input onChange={this.updateFields} id="firstName" placeholder='First Name'></Input><br></br>
                 <Input onChange={this.updateFields} id="lastName" placeholder='Last Name'></Input><br></br>
-                <Input onChange={this.updateFields} id="email" placeholder='Email Name'></Input><br></br>
+                <Input onChange={this.updateFields} id="email" placeholder='Email'></Input><br></br>
                 <Input onChange={this.updateFields} id="status_code" placeholder='Status Code'></Input><br></br>
                 <Input onChange={this.updateFields} id="status" placeholder='Status'></Input><br></br>
 
                 <Button onClick={this.checkFields}
-                    variant="outlined" color="primary" style={{margin: 10}}>
+                    variant="outlined" color="primary" id="add-student" style={{margin: 10}}>
                     Add Student
                 </Button>
 
                 <div hidden id='error'>
                   <Alert severity="error">Please fill out necessary fields.</Alert>
                 </div>
+
+
+                <ul id="addedList" hidden>
+                  <li>{this.state.addedStudentId}</li>
+                  <li id="addedName">{this.state.addedName}</li>
+                  <li id="addedEmail">{this.state.addedEmail}</li>
+                  <li id="addedCode">{this.state.addedStatusCode}</li>
+                  <li id="addedStatus">{this.state.addedStatus}</li>
+                </ul>
 
             </div>
 
